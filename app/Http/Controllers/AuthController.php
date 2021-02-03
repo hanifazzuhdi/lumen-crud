@@ -56,12 +56,12 @@ class AuthController extends Controller
                     'user' => $user,
                     'token' => $user->api_token
                 ]
-            ], 200);
+            ], 200)->header('Accept', 'application/json');
         } else {
             return response()->json([
                 'status' => 'failed',
                 'message' => 'Login Gagal Password Anda Salah',
-            ], 400);
+            ], 400)->header('Accept', 'application/json');
         }
     }
 }
