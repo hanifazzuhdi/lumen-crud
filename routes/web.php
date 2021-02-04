@@ -19,11 +19,8 @@ $router->get('/', function () use ($router) {
     return $router->app->version();
 });
 
-$router->get('/key', function () {
-    return Str::random(32);
-});
-
-
 // route definition
 $router->post('/register', 'AuthController@register');
 $router->post('/login', 'AuthController@login');
+
+$router->get('/show', 'UserController@show');

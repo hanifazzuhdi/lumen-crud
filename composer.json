@@ -6,8 +6,10 @@
     "type": "project",
     "require": {
         "php": "^7.3|^8.0",
+        "flipbox/lumen-generator": "^8.2",
         "laravel/lumen-framework": "^8.0",
-        "nesbot/carbon": "^2.44"
+        "nesbot/carbon": "^2.44",
+        "tymon/jwt-auth": "^1.0.2"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
