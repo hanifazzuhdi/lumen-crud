@@ -81,8 +81,9 @@ class UserController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param  \Illuminate\Http\Request  $request
      */
+
     public function destroy(Request $request)
     {
         $this->validate($request, [
@@ -97,6 +98,6 @@ class UserController extends Controller
             return $this->sendResponse('failed', 'Password tidak cocok', null, 400);
         }
 
-        return $this->sendResponse('success', 'User Berhasil dihapus', null, 200);
+        return $this->sendResponse('success', 'Akun berhasil dihapus', $user, 202);
     }
 }

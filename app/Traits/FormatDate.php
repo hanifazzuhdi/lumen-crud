@@ -9,7 +9,7 @@ trait FormatDate
     public function getCreatedAtAttribute()
     {
         return Carbon::parse($this->attributes['created_at'])
-            ->format('d, M Y H:i');
+            ->format('d, F Y H:i');
     }
 
     public function getUpdatedAtAttribute()
