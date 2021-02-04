@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Support\Str;
 
 /** @var \Laravel\Lumen\Routing\Router $router */
 

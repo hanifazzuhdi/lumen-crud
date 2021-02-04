@@ -14,7 +14,7 @@ class UserController extends Controller
      */
     public function __construct()
     {
-        return $this->middleware('auth');
+        return $this->middleware('jwt.auth');
     }
 
     public function show()
