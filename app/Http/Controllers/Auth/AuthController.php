@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Auth;
 
 use App\Models\User;
+use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Tymon\JWTAuth\Exceptions\JWTException;
-use Tymon\JWTAuth\Facades\JWTAuth;
+use App\Http\Controllers\Controller;
 
 class AuthController extends Controller
 {
@@ -43,7 +44,7 @@ class AuthController extends Controller
     {
         $this->validate($request, [
             'name' => 'required',
-            'email' => 'required|unique:users',
+            'email' => 'required|unique:users|email',
             'password' => 'required'
         ]);
 
@@ -53,13 +54,10 @@ class AuthController extends Controller
             'password' => Hash::make($request->input('password')),
         ]);
 
-        return response()->json([
-            'status' => 'success',
-            'message' => 'User Berhasil dibuat',
-            'data' => $user
-        ], 201);
+        return $this->sendResponse('success', 'User Berhasil dibuat', $user, 201);
     }
 
+    // Login chect api_token from db
     // /**
     //  * Function for login
     //  *

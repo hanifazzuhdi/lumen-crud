@@ -18,8 +18,16 @@ $router->get('/', function () use ($router) {
     return $router->app->version();
 });
 
-// route definition
-$router->post('/register', 'AuthController@register');
-$router->post('/login', 'AuthController@login');
+// Route Auth
+$router->group(['namespace' => 'Auth'], function () use ($router) {
+    $router->post('/register', 'AuthController@register');
+    $router->post('/login', 'AuthController@login');
+});
 
-$router->get('/show', 'UserController@show');
+// Route User
+$router->group(['namespace' => 'Api', 'middleware' => 'jwt.auth'], function () use ($router) {
+    $router->get('/profile', 'UserController@show');
+    $router->post('/update-profile', 'UserController@update');
+    $router->post('/update-password', 'UserController@updatePassword');
+    $router->delete('/user-delete', 'UserController@destroy');
+});

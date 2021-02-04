@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Exception;
 use Tymon\JWTAuth\Facades\JWTAuth;
+use Tymon\JWTAuth\Http\Middleware\BaseMiddleware;
 
 class JwtMiddleware
 {
