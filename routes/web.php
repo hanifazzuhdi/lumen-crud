@@ -31,3 +31,7 @@ $router->group(['namespace' => 'Api', 'middleware' => 'jwt.auth'], function () u
     $router->post('/update-password', 'UserController@updatePassword');
     $router->delete('/user-delete', 'UserController@destroy');
 });
+
+// Route Upload
+$router->post('/single-upload', 'UploadController@singleUpload');
+$router->post('/multi-upload', 'UploadController@singleUpload');
