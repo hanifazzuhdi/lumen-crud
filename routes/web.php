@@ -14,6 +14,8 @@
 |
 */
 
+// Setiap endpoint ditambahkan prefix api
+
 $router->get('/', function () use ($router) {
     return $router->app->version();
 });
@@ -34,4 +36,4 @@ $router->group(['namespace' => 'Api', 'middleware' => 'jwt.auth'], function () u
 
 // Route Upload
 $router->post('/single-upload', 'UploadController@singleUpload');
-$router->post('/multi-upload', 'UploadController@singleUpload');
+$router->post('/multi-upload', 'UploadController@multiUpload');
