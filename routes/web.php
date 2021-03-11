@@ -14,7 +14,7 @@
 |
 */
 
-// Setiap endpoint ditambahkan prefix api
+// Setiap Endpoint ditambahkan prefix api
 
 $router->get('/', function () use ($router) {
     return $router->app->version();
