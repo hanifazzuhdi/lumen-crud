@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 
 class UploadController extends Controller
@@ -12,35 +13,46 @@ class UploadController extends Controller
             'file' => 'required|image|mimes:png,jpg,jpeg,svg',
         ]);
 
-        if ($request->file('file')->isValid()) {
+        if ($request->file->isValid()) {
 
-            $file = $request->file('file');
+            $file = $request->file;
             $fileName = 'singleUpload-' . time() . '.' . $file->getClientOriginalExtension();
 
-            $request->file('file')->move('image', $fileName);
+            $request->file->move('image', $fileName);
         }
 
-        return response(['status' => 'success']);
+        return $this->sendResponse('success', 'file uploaded', config('app.url') . '/image/' . $fileName, 200);
     }
 
+    // Upload to imgbb
     public function multiUpload(Request $request)
     {
         $this->validate($request, [
             'file.*' => 'required|image|mimes:png,jpg,jpeg,svg'
         ]);
 
-        foreach ($request->file('file') as $image) {
+        $data = [];
+        foreach ($request->file as $image) {
 
             if ($image->isValid()) {
 
-                $file = $image;
-                $fileName = 'multiUpload-' . time() . '.' . $file->getClientOriginalExtension();
+                $file = base64_encode(file_get_contents($image));
+                $fileName = 'multiUpload-' . time();
 
-                $image->move('image', $fileName);
+                $client = new Client();
+                $response = $client->request('POST', 'https://api.imgbb.com/1/upload', [
+                    'form_params' => [
+                        'key' => 'f98a15c0e84720165f5cd99516022338',
+                        'image' => $file,
+                        'name' => $fileName
+                    ]
+                ]);
             }
-            sleep(1);
+
+            $res = json_decode($response->getBody()->getContents(), true);
+            $data[] =  $res['data']['url'];
         }
 
-        return response(['status' => 'success']);
+        return $this->sendResponse('success', 'files uploaded', $data, 200);
     }
 }

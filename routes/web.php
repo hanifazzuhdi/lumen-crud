@@ -31,7 +31,7 @@ $router->group(['namespace' => 'Api', 'middleware' => 'jwt.auth'], function () u
     $router->get('/profile', 'UserController@show');
     $router->post('/update-profile', 'UserController@update');
     $router->post('/update-password', 'UserController@updatePassword');
-    $router->delete('/user-delete', 'UserController@destroy');
+    $router->post('/user-delete', 'UserController@destroy');
 });
 
 // Route Upload

@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\{Auth, Hash};
+use App\Http\Controllers\Controller;
 
 class UserController extends Controller
 {
@@ -18,9 +17,9 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        $data = $user->find(Auth::id());
+        $data = $user->findOrFail(10);
 
-        return $this->sendResponse('success', 'Profile berhasil dimuat', $data, 200);
+        return $this->sendResponse('success', 'profile successfully loaded', $data, 200);
     }
 
     /**
@@ -31,20 +30,20 @@ class UserController extends Controller
      */
     public function update(Request $request)
     {
-        $user = User::find(Auth::id());
+        $user = User::findOrFail(Auth::id());
 
-        if ($request->input('email')) {
+        if ($request->email) {
             $user->update(['email' => 'update']);
         }
 
         $this->validate($request, ['email' => 'email|unique:users']);
 
         $user->update([
-            'name' => $request->input('name') != null ? request('name')  : $user->name,
-            'email' => $request->input('email') != null ? request('email') : $user->email,
+            'name' => $request->name != null ? request('name')  : $user->name,
+            'email' => $request->email != null ? request('email') : $user->email,
         ]);
 
-        return $this->sendResponse('success', 'Data user berhasil diupdate', $user, 202);
+        return $this->sendResponse('success', 'data has been updated successfully', $user, 200);
     }
 
     /**
@@ -57,23 +56,23 @@ class UserController extends Controller
     {
         $this->validate($request, ['oldPassword' => 'required', 'newPassword' => 'required']);
 
-        $user = User::find(Auth::id());
+        $user = User::findOrFail(Auth::id());
 
-        if (Hash::check($request->input('oldPassword'), $user->password)) {
+        if (Hash::check($request->oldPassword, $user->password)) {
 
             // jika password baru sama dengan password lama
-            if ($request->input('oldPassword') == $request->input('newPassword')) {
-                return $this->sendResponse('failed', 'Password baru tidak boleh sama dengan password lama', null, 400);
+            if ($request->oldPassword == $request->newPassword) {
+                return $this->sendResponse('failed', 'The new password cannot be the same as the old password', null, 400);
             }
 
             $user->update([
-                'password' => Hash::make($request->input('newPassword'))
+                'password' => Hash::make($request->newPassword)
             ]);
         } else {
-            return $this->sendResponse('failed', 'Password lama tidak cocok', null, 400);
+            return $this->sendResponse('failed', "old passwords don't match", null, 400);
         }
 
-        return $this->sendResponse('success', 'Password berhasil diubah', $user, 202);
+        return $this->sendResponse('success', 'password changed successfully', $user, 200);
     }
 
 
@@ -90,14 +89,14 @@ class UserController extends Controller
             'password' => 'required'
         ]);
 
-        $user = User::find(Auth::id());
+        $user = User::findOrFail(Auth::id());
 
-        if (Hash::check($request->input('password'), $user->password)) {
+        if (Hash::check($request->password, $user->password)) {
             $user->delete();
         } else {
-            return $this->sendResponse('failed', 'Password tidak cocok', null, 400);
+            return $this->sendResponse('failed', "password don't match", null, 400);
         }
 
-        return $this->sendResponse('success', 'Akun berhasil dihapus', $user, 202);
+        return $this->sendResponse('success', 'account deleted successfully', $user, 200);
     }
 }

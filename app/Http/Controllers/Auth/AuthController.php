@@ -33,7 +33,7 @@ class AuthController extends Controller
             'api_token' => $token
         ]);
 
-        return response()->json(compact('user', 'token'), 202);
+        return response()->json(compact('user', 'token'), 200);
     }
 
     /**
@@ -49,12 +49,12 @@ class AuthController extends Controller
         ]);
 
         $user = User::create([
-            'name' => $request->input('name'),
-            'email' => $request->input('email'),
-            'password' => Hash::make($request->input('password')),
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
         ]);
 
-        return $this->sendResponse('success', 'User Berhasil dibuat', $user, 201);
+        return $this->sendResponse('success', 'user created successfully', $user, 201);
     }
 
     // Login chect api_token from db
